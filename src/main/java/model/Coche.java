@@ -1,21 +1,28 @@
 package model;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Coche {
+    @XmlElement(name = "matricula-coche")
     private String matricula;
+
     private String marca;
+
     private String modelo;
 
+    @XmlAttribute
     private int id;
 
+    @XmlElementWrapper(name = "equipamiento")
+    @XmlElement(name = "extra")
     private List<Equipamiento> equipamientos;
 
-    public Coche() {
-        this.equipamientos = new ArrayList<>();
-    }
-
+    //Constructor
+    public Coche() {}
 
     //Getters y Setters
 
@@ -57,5 +64,16 @@ public class Coche {
 
     public void setEquipamientos(List<Equipamiento> equipamientos) {
         this.equipamientos = equipamientos;
+    }
+
+    @Override
+    public String toString() {
+        return "Coche{" +
+                "matricula='" + matricula + '\'' +
+                ", marca='" + marca + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", id=" + id +
+                ", equipamiento=" + equipamientos +
+                '}';
     }
 }

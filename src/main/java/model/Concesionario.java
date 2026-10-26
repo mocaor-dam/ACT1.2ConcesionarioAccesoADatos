@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlRootElement
+@XmlRootElement(name = "concesionario-de-coches")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Concesionario {
 
@@ -24,5 +24,13 @@ public class Concesionario {
 
     public void setCoches(List<Coche> coches) {
         this.coches = coches;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Concesionario{" +
+                "coches=" + coches +
+                '}';
     }
 }
