@@ -33,4 +33,14 @@ public class Concesionario {
                 "coches=" + coches +
                 '}';
     }
+
+
+    public boolean existeMatricula(String matricula){
+        for (Coche c : this.coches){
+            if (c.getMatricula() == null){
+                return false;
+            }
+        }
+        return true;
+    }
 }

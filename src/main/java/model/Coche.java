@@ -66,6 +66,8 @@ public class Coche {
         this.equipamientos = equipamientos;
     }
 
+
+    //ToString
     @Override
     public String toString() {
         return "Coche{" +
