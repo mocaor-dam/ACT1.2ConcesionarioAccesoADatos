@@ -15,19 +15,24 @@ import java.util.List;
 public class Principal {
     public static void main(String[] args) throws JAXBException {
 
-        try {
 
+        try {
             GestionConcesionarioService.inicializar();
             System.out.println("Se ha cargado la base de datos correctamente");
+        } catch (AppException e) {
+            System.out.println("Error al iniciar la base de datos: " + e.getMessage());
+        }
 
-            boolean activo = true;
-            while (activo){
+        boolean activo = true;
+        while (activo) {
+            try {
                 interfaz();
                 int opcion = MiEntradaSalida.leerEnteroRango("Introduce la opcion: ", 1, 9);
 
-                switch (opcion){
+                switch (opcion) {
                     case 1:
-
+                        GestionConcesionarioService.importarDesdeCsv();
+                        System.out.println("Se han importado correctamente los coches desde el archivo CSV.");
                         break;
                     case 2:
                         //Recogemos los datos del coche
@@ -39,7 +44,7 @@ public class Principal {
                         int numEquipamientos = MiEntradaSalida.leerEntero("Introduce cuantos modulos de equipamientos quieres añadir: ");
 
                         //Creamos una lista de los equipamientos
-                       List<Equipamiento> equipamientosUsuario = new ArrayList<>(numEquipamientos);
+                        List<Equipamiento> equipamientosUsuario = new ArrayList<>(numEquipamientos);
 
 
                         for (int i = 0; i < numEquipamientos; i++) {
@@ -57,7 +62,9 @@ public class Principal {
                         coche.setEquipamientos(equipamientosUsuario);
 
                         GestionConcesionarioService.insertarCocheNuevo(coche);
-                        
+
+                        System.out.println("Coche insertado correctamente.");
+
                         break;
                     case 3:
                         break;
@@ -75,17 +82,17 @@ public class Principal {
                         activo = false;
                         break;
                 }
-            }
+            } catch (MiEntradaSalidaException | AppException | MatriculaRepetidaException e) {
+                System.out.println(e.getMessage());
 
-        } catch (MiEntradaSalidaException | AppException | MatriculaRepetidaException e) {
-            System.out.println(e.getMessage());
+            }
         }
 
 
     }
 
 
-    public static void interfaz(){
+    public static void interfaz() {
         System.out.println("\n=== Menu Gestion Concesionario ===");
         System.out.println("1. Importar coches desde el CSV");
         System.out.println("2. Insertar un coche nuevo");
@@ -97,8 +104,6 @@ public class Principal {
         System.out.println("8. Generar informa resumen");
         System.out.println("9. Salir");
     }
-
-
 
 
 }
