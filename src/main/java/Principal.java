@@ -1,8 +1,11 @@
+import exceptions.AppException;
+import exceptions.MatriculaRepetidaException;
 import exceptions.MiEntradaSalidaException;
 import jakarta.xml.bind.*;
 import model.Coche;
 import model.Concesionario;
 import model.Equipamiento;
+import service.GestionConcesionarioService;
 import utils.MiEntradaSalida;
 
 import java.io.File;
@@ -10,11 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Principal {
-    static void main(String[] args) throws JAXBException {
+    public static void main(String[] args) throws JAXBException {
 
         try {
+
+            GestionConcesionarioService.inicializar();
+            System.out.println("Se ha cargado la base de datos correctamente");
+
             boolean activo = true;
             while (activo){
+                interfaz();
                 int opcion = MiEntradaSalida.leerEnteroRango("Introduce la opcion: ", 1, 9);
 
                 switch (opcion){
@@ -22,16 +30,33 @@ public class Principal {
 
                         break;
                     case 2:
+                        //Recogemos los datos del coche
                         String matriculaUsuario = MiEntradaSalida.leerTexto("Introduce la matricula: ");
-                        String marcaUsuario = MiEntradaSalida.leerTexto("Introduce la matricula: ");
+                        String marcaUsuario = MiEntradaSalida.leerTexto("Introduce la marca: ");
                         String modeloUsuario = MiEntradaSalida.leerTexto("Introduce el modelo: ");
 
-                        
+
                         int numEquipamientos = MiEntradaSalida.leerEntero("Introduce cuantos modulos de equipamientos quieres añadir: ");
 
+                        //Creamos una lista de los equipamientos
                        List<Equipamiento> equipamientosUsuario = new ArrayList<>(numEquipamientos);
 
 
+                        for (int i = 0; i < numEquipamientos; i++) {
+                            String extra = MiEntradaSalida.leerTexto("Introduce el equipamiento: ");
+                            Equipamiento e = new Equipamiento();
+                            e.setNombre(extra);
+                            equipamientosUsuario.add(e);
+                        }
+
+                        Coche coche = new Coche();
+
+                        coche.setMatricula(matriculaUsuario);
+                        coche.setMarca(marcaUsuario);
+                        coche.setModelo(modeloUsuario);
+                        coche.setEquipamientos(equipamientosUsuario);
+
+                        GestionConcesionarioService.insertarCocheNuevo(coche);
                         
                         break;
                     case 3:
@@ -52,7 +77,7 @@ public class Principal {
                 }
             }
 
-        } catch (MiEntradaSalidaException e) {
+        } catch (MiEntradaSalidaException | AppException | MatriculaRepetidaException e) {
             System.out.println(e.getMessage());
         }
 

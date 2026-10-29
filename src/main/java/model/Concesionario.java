@@ -37,10 +37,10 @@ public class Concesionario {
 
     public boolean existeMatricula(String matricula){
         for (Coche c : this.coches){
-            if (c.getMatricula() == null){
-                return false;
+            if (c.getMatricula() != null && c.getMatricula().equalsIgnoreCase(matricula)){
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }
