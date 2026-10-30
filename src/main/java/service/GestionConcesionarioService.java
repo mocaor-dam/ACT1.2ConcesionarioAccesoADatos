@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GestionConcesionarioService {
@@ -95,6 +96,39 @@ public class GestionConcesionarioService {
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
         marshalling(concesionario, rutaXml);
 
+    }
+
+    public static void ordenarPorMatricula() throws JAXBException, AppException {
+        concesionario.getCoches().sort(Comparator.comparing(Coche::getMatricula));
+        String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
+        marshalling(concesionario, rutaXml);
+    }
+
+    public static void borrarRegistroPorMatricula(String matricula) throws AppException, JAXBException {
+        if (concesionario.existeMatricula(matricula)){
+            concesionario.getCoches().removeIf(coche -> coche.getMatricula().equalsIgnoreCase(matricula));
+            String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
+            marshalling(concesionario, rutaXml);
+        } else {
+            throw new AppException("No se encontro ningun coche con la matricula: " + matricula);
+        }
+    }
+
+    public static void modificarRegistro(String matricula, String marca, String modelo, List<Equipamiento> equipamientos) throws JAXBException, AppException {
+        if (concesionario.existeMatricula(matricula)){
+           Coche cocheAModificar = concesionario.getCoches().stream()
+                   .filter(coche -> coche.getMatricula().equalsIgnoreCase(matricula))
+                   .findFirst().orElseThrow(() -> new AppException("Error: No existe ningun coche con esa matricula"));
+
+           cocheAModificar.setMarca(marca);
+           cocheAModificar.setModelo(modelo);
+           cocheAModificar.setEquipamientos(equipamientos);
+
+           String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
+           marshalling(concesionario,rutaXml);
+        } else {
+            throw new AppException("No se ha encontrado un coche con esa matricula");
+        }
     }
 
     private static void marshalling(Concesionario concesionario, String nombreFichero) throws JAXBException {

@@ -36,9 +36,9 @@ public class Principal {
                         break;
                     case 2:
                         //Recogemos los datos del coche
-                        String matriculaUsuario = MiEntradaSalida.leerTexto("Introduce la matricula: ");
-                        String marcaUsuario = MiEntradaSalida.leerTexto("Introduce la marca: ");
-                        String modeloUsuario = MiEntradaSalida.leerTexto("Introduce el modelo: ");
+                        String matriculaUsuario = MiEntradaSalida.leerLinea("Introduce la matricula: ");
+                        String marcaUsuario = MiEntradaSalida.leerLinea("Introduce la marca: ");
+                        String modeloUsuario = MiEntradaSalida.leerLinea("Introduce el modelo: ");
 
 
                         int numEquipamientos = MiEntradaSalida.leerEntero("Introduce cuantos modulos de equipamientos quieres añadir: ");
@@ -48,7 +48,7 @@ public class Principal {
 
 
                         for (int i = 0; i < numEquipamientos; i++) {
-                            String extra = MiEntradaSalida.leerTexto("Introduce el equipamiento: ");
+                            String extra = MiEntradaSalida.leerLinea("Introduce el equipamiento: ");
                             Equipamiento e = new Equipamiento();
                             e.setNombre(extra);
                             equipamientosUsuario.add(e);
@@ -67,10 +67,38 @@ public class Principal {
 
                         break;
                     case 3:
+                        GestionConcesionarioService.ordenarPorMatricula();
+                        System.out.println("Coches ordenados por matricula correctamente");
                         break;
                     case 4:
+                        String matriculaABorrar = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras borrar");
+                        GestionConcesionarioService.borrarRegistroPorMatricula(matriculaABorrar);
+                        System.out.println("El Coche con matricula: " + matriculaABorrar + " fue borrado correctamente");
                         break;
                     case 5:
+                        String matriculaBuscar = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras modificar");
+
+                        String marcaNueva = MiEntradaSalida.leerLinea("Introduce la marca");
+                        String modeloNuevo = MiEntradaSalida.leerLinea("Introduce la modelo");
+
+
+                        int numEquipamientosNuevos = MiEntradaSalida.leerEntero("Introduce el numero de equipamientos que le quieras añadir");
+
+                        List<Equipamiento> equipamientos = new ArrayList<>(numEquipamientosNuevos);
+
+                        for (int i = 0; i < numEquipamientosNuevos; i++) {
+                            String extraNuevo = MiEntradaSalida.leerLinea("Introduce el extra nuevo");
+
+                            Equipamiento equipamientoNuevo = new Equipamiento();
+
+                            equipamientoNuevo.setNombre(extraNuevo);
+
+                            equipamientos.add(equipamientoNuevo);
+
+                        }
+
+                        GestionConcesionarioService.modificarRegistro(matriculaBuscar, marcaNueva, modeloNuevo, equipamientos);
+
                         break;
                     case 6:
                         break;
@@ -82,7 +110,7 @@ public class Principal {
                         activo = false;
                         break;
                 }
-            } catch (MiEntradaSalidaException | AppException | MatriculaRepetidaException e) {
+            } catch (MiEntradaSalidaException | AppException | MatriculaRepetidaException | JAXBException e) {
                 System.out.println(e.getMessage());
 
             }
