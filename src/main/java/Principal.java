@@ -101,10 +101,40 @@ public class Principal {
 
                         break;
                     case 6:
+                        System.out.println("\nTienes estas opciones: ");
+                        System.out.println("1. Exportar toda la base de datos");
+                        System.out.println("2. Exportar un solo coche");
+
+                        int opcion6 = MiEntradaSalida.leerEnteroRango("Selecciona la opcion", 1, 2);
+
+                        if (opcion6 == 1){
+                            GestionConcesionarioService.exportarConcesionarioJson();
+                            System.out.println("Base de Datos exportada a JSON correctamente.");
+                        } else {
+                            String matriculaBuscada = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras exportar.");
+                            String rutaSalida = MiEntradaSalida.leerLinea("Introduce la ruta o el nombre del fichero JSON al que exportar el coche.");
+                            GestionConcesionarioService.exportarCocheJson(matriculaBuscada, rutaSalida);
+                            System.out.println("Coche exportado a JSON correctamente");
+                        }
                         break;
                     case 7:
+                        System.out.println("1. Importar Base de datos");
+                        System.out.println("2. Importar un coche");
+
+                        int op7 = MiEntradaSalida.leerEnteroRango("Selecciona la opcion", 1,2);
+
+                        if (op7 == 1){
+                            String rutaJsonBBDD = MiEntradaSalida.leerLinea("Introduce la ruta del Json a importar");
+                            GestionConcesionarioService.importarConcesionarioJson(rutaJsonBBDD);
+                            System.out.println("Base de datos importada correctamente!");
+                        } else {
+                            String rutaJsonCoche = MiEntradaSalida.leerLinea("Introduce la ruta del fichero Json del que se va a importar el coche");
+                            GestionConcesionarioService.importarCocheJson(rutaJsonCoche);
+                            System.out.println("Coche importado correctamente!");
+                        }
                         break;
                     case 8:
+                        GestionConcesionarioService.generarInformeResumen();
                         break;
                     case 9:
                         activo = false;
@@ -129,7 +159,7 @@ public class Principal {
         System.out.println("5. Modificar un registro");
         System.out.println("6. Exportar a JSON");
         System.out.println("7. Importar desde JSON");
-        System.out.println("8. Generar informa resumen");
+        System.out.println("8. Generar informe resumen");
         System.out.println("9. Salir");
     }
 
