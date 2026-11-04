@@ -2,6 +2,16 @@
 <concesionario-de-coches>
     <listado-coches>
         <coche id="1">
+            <matricula-coche>1122QRS</matricula-coche>
+            <marca>Toyota</marca>
+            <modelo>Yaris</modelo>
+            <equipamiento>
+                <extra>Llantas de aleación</extra>
+                <extra>Techo solar</extra>
+                <extra>Cámara trasera</extra>
+            </equipamiento>
+        </coche>
+        <coche id="2">
             <matricula-coche>3456JKL</matricula-coche>
             <marca>Seat</marca>
             <modelo>Ibiza</modelo>
@@ -10,7 +20,7 @@
                 <extra>Sensor de aparcamiento</extra>
             </equipamiento>
         </coche>
-        <coche id="2">
+        <coche id="3">
             <matricula-coche>5678DEF</matricula-coche>
             <marca>Ford</marca>
             <modelo>Focus</modelo>
@@ -19,7 +29,7 @@
                 <extra>Sensor de aparcamiento</extra>
             </equipamiento>
         </coche>
-        <coche id="3">
+        <coche id="4">
             <matricula-coche>7890MNP</matricula-coche>
             <marca>Peugeot</marca>
             <modelo>208</modelo>
@@ -27,22 +37,12 @@
                 <extra>Navegador GPS</extra>
             </equipamiento>
         </coche>
-        <coche id="4">
+        <coche id="5">
             <matricula-coche>9012GHI</matricula-coche>
             <marca>renault</marca>
             <modelo>scenic</modelo>
             <equipamiento>
                 <extra>aleron</extra>
-            </equipamiento>
-        </coche>
-        <coche id="5">
-            <matricula-coche>1122QRS</matricula-coche>
-            <marca>Toyota</marca>
-            <modelo>Yaris</modelo>
-            <equipamiento>
-                <extra>Llantas de aleación</extra>
-                <extra>Techo solar</extra>
-                <extra>Cámara trasera</extra>
             </equipamiento>
         </coche>
     </listado-coches>
