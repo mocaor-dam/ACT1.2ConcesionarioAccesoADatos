@@ -28,7 +28,8 @@ public class GestionConcesionarioService {
     }
 
     /**
-     *
+     * En este metodo se realiza el unmarshalling, es el metodo necesario para iniciar el programa
+     * ya que es el metodo que carga los datos dentro del objeto de tipo Concesionario
      * @throws AppException
      * @throws JAXBException
      */
@@ -43,7 +44,7 @@ public class GestionConcesionarioService {
     }
 
     /**
-     *
+     * Metodo encargado de la importacion del csv
      * @throws AppException
      */
     public static void importarDesdeCsv() throws AppException {
@@ -100,33 +101,37 @@ public class GestionConcesionarioService {
     }
 
     /**
-     * Comprobamos si existe la matricula
-     * @param coche
+     *
+     * @param coche coche creado con los datos pedidos en la clase principal
      * @throws MatriculaRepetidaException
      * @throws JAXBException
      * @throws AppException
      */
     public static void insertarCocheNuevo(Coche coche) throws MatriculaRepetidaException, JAXBException, AppException {
+        //Comprobamos si existe la matricula con el metodo creado en la clase Concesionario
         if (concesionario.existeMatricula(coche.getMatricula())){
             throw new MatriculaRepetidaException("Error: Esa matricula ya existe.");
         }
         //Asignamos el id del coche
         coche.setId(concesionario.getCoches().size() + 1);
-
+        //Añadimos el coche a la lista de coches
         concesionario.getCoches().add(coche);
+
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
         marshalling(concesionario, rutaXml);
 
     }
 
     /**
-     *
+     * Metodo encargado de la ordenacion por matricula
      * @throws JAXBException
      * @throws AppException
      */
     public static void ordenarPorMatricula() throws JAXBException, AppException {
+        //Usamos un comparator para ordenar alfabeticamente por matricula
         concesionario.getCoches().sort(Comparator.comparing(Coche::getMatricula));
 
+        //Llamo al metodo auxiliar que se encarga de reorganizar el id de los coches
         reorganizarIds();
 
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
@@ -135,13 +140,14 @@ public class GestionConcesionarioService {
 
 
     /**
-     *
-     * @param matricula
+     * Metodo encargado del borrado de coches por matricula
+     * @param matricula matricula por la que se va a buscar el coche para eliminarlo
      * @throws AppException
      * @throws JAXBException
      */
     public static void borrarRegistroPorMatricula(String matricula) throws AppException, JAXBException {
         if (concesionario.existeMatricula(matricula)){
+            //Borramos el coche SI coincide la matricula con la matricula introducida
             concesionario.getCoches().removeIf(coche -> coche.getMatricula().equalsIgnoreCase(matricula));
 
             reorganizarIds();
@@ -154,20 +160,21 @@ public class GestionConcesionarioService {
     }
 
     /**
-     *
-     * @param matricula
-     * @param marca
-     * @param modelo
-     * @param equipamientos
+     * Metodo encargado de la modificacion de los registros
+     * @param matricula matricula introducida por la que buscar el coche a modificar
+     * @param marca la nueva marca que se le va a modificar por la anterior
+     * @param modelo el nuevo modelo que se le va a modificar por el modelo anterior
+     * @param equipamientos los nuevos equipamientos que se le van a modificar por el anterior
      * @throws JAXBException
      * @throws AppException
      */
     public static void modificarRegistro(String matricula, String marca, String modelo, List<Equipamiento> equipamientos) throws JAXBException, AppException {
         if (concesionario.existeMatricula(matricula)){
-           Coche cocheAModificar = concesionario.getCoches().stream()
+           //Abrimos un flujo donde filtramos por matricula, buscando el coche que coincida con la matricula
+            Coche cocheAModificar = concesionario.getCoches().stream()
                    .filter(coche -> coche.getMatricula().equalsIgnoreCase(matricula))
                    .findFirst().orElseThrow(() -> new AppException("Error: No existe ningun coche con esa matricula"));
-
+           //Cambiamos los datos de ese coche por el nuevo
            cocheAModificar.setMarca(marca);
            cocheAModificar.setModelo(modelo);
            cocheAModificar.setEquipamientos(equipamientos);
@@ -181,16 +188,20 @@ public class GestionConcesionarioService {
 
 
     /**
-     *
+     * Metodo encargado de la exportacion del concesionario completo a Json
      * @throws AppException
      */
     public static void exportarConcesionarioJson() throws AppException {
         String rutaJson = PropertiesReader.getInstance().get("ruta.json");
 
+        //He usado la libreria Gson, ya que me resulta mas sencilla
+        //Creamos un Gson con el GsonBuilder, y le ponemos setPrettyPrinting para que tenga un formato humano y mas legible
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-
+        //Creamos el escritor donde le pasamos la ruta del properties rutaJson, con el formato UTF_8 para que no de error las letras españolas,
+        //como la Ñ o las tildes
         try (Writer writer = Files.newBufferedWriter(Path.of(rutaJson), StandardCharsets.UTF_8)){
+            //Usamos el metodo toJson de la libreria Gson para pasarlo al fichero JSON
             gson.toJson(concesionario, writer);
         } catch (IOException e) {
             throw new AppException("Error al exportar la base de datos a JSON: " + e.getMessage());
@@ -198,7 +209,7 @@ public class GestionConcesionarioService {
     }
 
     /**
-     *
+     * Metodo encargado de la exportacion de UN solo coche a JSON
      * @param matricula
      * @param rutaFicheroSalida
      * @throws AppException
@@ -208,6 +219,7 @@ public class GestionConcesionarioService {
             throw new AppException("No existe ningun coche con la matricula " + matricula);
         }
 
+        //Abrimos un flujo donde filtramos por matricula, buscando el coche que coincida con la matricula
         Coche cocheEncontrado = concesionario.getCoches().stream()
                 .filter(coche1 -> coche1.getMatricula().equalsIgnoreCase(matricula))
                 .findFirst().orElseThrow(() -> new AppException("Error al buscar el coche con la siguiente matricula: " + matricula));

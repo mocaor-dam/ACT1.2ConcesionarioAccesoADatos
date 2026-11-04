@@ -46,7 +46,7 @@ public class Principal {
                         //Creamos una lista de los equipamientos
                         List<Equipamiento> equipamientosUsuario = new ArrayList<>(numEquipamientos);
 
-
+                        //Recorro en un bucle con el numero de equipamientos y le pido el equipamiento y creo el objeto de equipamiento y lo añado con el setter
                         for (int i = 0; i < numEquipamientos; i++) {
                             String extra = MiEntradaSalida.leerLinea("Introduce el equipamiento: ");
                             Equipamiento e = new Equipamiento();
@@ -135,6 +135,7 @@ public class Principal {
                         break;
                     case 8:
                         GestionConcesionarioService.generarInformeResumen();
+                        System.out.println("Informe generado Correctamente!");
                         break;
                     case 9:
                         activo = false;

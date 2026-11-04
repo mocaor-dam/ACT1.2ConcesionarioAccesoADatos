@@ -35,5 +35,15 @@
                 <extra>aleron</extra>
             </equipamiento>
         </coche>
+        <coche id="5">
+            <matricula-coche>1122QRS</matricula-coche>
+            <marca>Toyota</marca>
+            <modelo>Yaris</modelo>
+            <equipamiento>
+                <extra>Llantas de aleación</extra>
+                <extra>Techo solar</extra>
+                <extra>Cámara trasera</extra>
+            </equipamiento>
+        </coche>
     </listado-coches>
 </concesionario-de-coches>
