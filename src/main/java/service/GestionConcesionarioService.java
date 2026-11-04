@@ -31,8 +31,8 @@ public class GestionConcesionarioService {
      * En este metodo se realiza el unmarshalling, es el metodo necesario para iniciar el programa
      * ya que es el metodo que carga los datos dentro del objeto de tipo Concesionario
      * No devuelve nada
-     * @throws AppException
-     * @throws JAXBException
+     * @throws AppException Si no encuentra la ruta.xml
+     * @throws JAXBException Si falla el unmarshalling
      */
     public static void inicializar() throws AppException, JAXBException {
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
@@ -46,7 +46,7 @@ public class GestionConcesionarioService {
 
     /**
      * Metodo encargado de la importacion del csv, no devuelve nada
-     * @throws AppException
+     * @throws AppException Si falla al importar el csv
      */
     public static void importarDesdeCsv() throws AppException {
         String rutaCsv = PropertiesReader.getInstance().get("ruta.csv");
@@ -104,9 +104,9 @@ public class GestionConcesionarioService {
     /**
      * Metodo encargado de la insercion de coches, no devuelve nada
      * @param coche coche creado con los datos pedidos en la clase principal
-     * @throws MatriculaRepetidaException
-     * @throws JAXBException
-     * @throws AppException
+     * @throws MatriculaRepetidaException Si ya existe esa matricula
+     * @throws JAXBException Si falla el marshalling
+     * @throws AppException Si no encuentra la ruta.xml
      */
     public static void insertarCocheNuevo(Coche coche) throws MatriculaRepetidaException, JAXBException, AppException {
         //Comprobamos si existe la matricula con el metodo creado en la clase Concesionario
@@ -125,8 +125,8 @@ public class GestionConcesionarioService {
 
     /**
      * Metodo encargado de la ordenacion por matricula, no devuelve nada
-     * @throws JAXBException
-     * @throws AppException
+     * @throws JAXBException Si falla el marshalling
+     * @throws AppException Si no encuentra la ruta.xml
      */
     public static void ordenarPorMatricula() throws JAXBException, AppException {
         //Usamos un comparator para ordenar alfabeticamente por matricula
@@ -143,8 +143,8 @@ public class GestionConcesionarioService {
     /**
      * Metodo encargado del borrado de coches por matricula, no devuelve nada
      * @param matricula matricula por la que se va a buscar el coche para eliminarlo
-     * @throws AppException
-     * @throws JAXBException
+     * @throws AppException Si no se encuentra coche con esa matricula
+     * @throws JAXBException Si falla el marshalling
      */
     public static void borrarRegistroPorMatricula(String matricula) throws AppException, JAXBException {
         if (concesionario.existeMatricula(matricula)){
@@ -166,8 +166,8 @@ public class GestionConcesionarioService {
      * @param marca la nueva marca que se le va a modificar por la anterior
      * @param modelo el nuevo modelo que se le va a modificar por el modelo anterior
      * @param equipamientos los nuevos equipamientos que se le van a modificar por el anterior
-     * @throws JAXBException
-     * @throws AppException
+     * @throws JAXBException Si falla el marshalling
+     * @throws AppException Si no encuentra un coche con esa matricula
      */
     public static void modificarRegistro(String matricula, String marca, String modelo, List<Equipamiento> equipamientos) throws JAXBException, AppException {
         if (concesionario.existeMatricula(matricula)){
@@ -190,7 +190,7 @@ public class GestionConcesionarioService {
 
     /**
      * Metodo encargado de la exportacion del concesionario completo a Json
-     * @throws AppException
+     * @throws AppException Si da error al exportar la base de datos
      */
     public static void exportarConcesionarioJson() throws AppException {
         String rutaJson = PropertiesReader.getInstance().get("ruta.json");
@@ -213,7 +213,7 @@ public class GestionConcesionarioService {
      * Metodo encargado de la exportacion de UN solo coche a JSON
      * @param matricula es el parametro por el que se busca el coche
      * @param rutaFicheroSalida es la ruta del fichero Json al que se va a exportar
-     * @throws AppException
+     * @throws AppException Si da error al exportar el coche
      */
     public static void exportarCocheJson(String matricula, String rutaFicheroSalida) throws AppException {
         if (!concesionario.existeMatricula(matricula)){
@@ -237,7 +237,7 @@ public class GestionConcesionarioService {
     /**
      * Metodo encargado de la importacion del concesionario desde un fichero JSON
      * @param rutaJson la ruta desde donde se va a importar los datos del concesionario
-     * @throws AppException
+     * @throws AppException Si da error al importar el concesionario o si el concesionario o su lista de coches esta vacio
      */
     public static void importarConcesionarioJson(String rutaJson) throws AppException {
         Gson gson = new Gson();
@@ -267,7 +267,7 @@ public class GestionConcesionarioService {
     /**
      * Metodo encargado de la importacion de UN solo coche desde un fichero Json
      * @param rutaJson es la ruta del fichero Json del que vamos a importar un coche
-     * @throws AppException
+     * @throws AppException Si ocurre un error al leer el archivo o ya existe esa matricula
      */
     public static void importarCocheJson(String rutaJson) throws AppException {
         Gson gson = new Gson();
@@ -357,7 +357,7 @@ public class GestionConcesionarioService {
            bufferedWriter.write("Lista de coches agrupados por marca");
            bufferedWriter.newLine();
            for (Map.Entry<String, List<Coche>> entry : cochesPorMarca.entrySet()){
-               bufferedWriter.write("Marca: " + entry.getKey() + entry.getValue().size() + " coches");
+               bufferedWriter.write("Marca: " + entry.getKey() + "(" + entry.getValue().size() + " coches)");
                bufferedWriter.newLine();
                for (Coche coche : entry.getValue()){
                    bufferedWriter.write(" | Matricula: " + coche.getMatricula() + " | Modelo: " + coche.getModelo());
