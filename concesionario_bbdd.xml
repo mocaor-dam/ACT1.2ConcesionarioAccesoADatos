@@ -2,13 +2,12 @@
 <concesionario-de-coches>
     <listado-coches>
         <coche id="1">
-            <matricula-coche>1234ABC</matricula-coche>
-            <marca>Renault</marca>
-            <modelo>Clio</modelo>
+            <matricula-coche>3456JKL</matricula-coche>
+            <marca>Seat</marca>
+            <modelo>Ibiza</modelo>
             <equipamiento>
                 <extra>Climatizador</extra>
-                <extra>Navegador GPS</extra>
-                <extra>Techo solar</extra>
+                <extra>Sensor de aparcamiento</extra>
             </equipamiento>
         </coche>
         <coche id="2">
@@ -21,6 +20,14 @@
             </equipamiento>
         </coche>
         <coche id="3">
+            <matricula-coche>7890MNP</matricula-coche>
+            <marca>Peugeot</marca>
+            <modelo>208</modelo>
+            <equipamiento>
+                <extra>Navegador GPS</extra>
+            </equipamiento>
+        </coche>
+        <coche id="4">
             <matricula-coche>9012GHI</matricula-coche>
             <marca>renault</marca>
             <modelo>scenic</modelo>

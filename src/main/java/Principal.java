@@ -71,23 +71,23 @@ public class Principal {
                         System.out.println("Coches ordenados por matricula correctamente");
                         break;
                     case 4:
-                        String matriculaABorrar = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras borrar");
+                        String matriculaABorrar = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras borrar: ");
                         GestionConcesionarioService.borrarRegistroPorMatricula(matriculaABorrar);
                         System.out.println("El Coche con matricula: " + matriculaABorrar + " fue borrado correctamente");
                         break;
                     case 5:
-                        String matriculaBuscar = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras modificar");
+                        String matriculaBuscar = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras modificar: ");
 
                         String marcaNueva = MiEntradaSalida.leerLinea("Introduce la marca");
                         String modeloNuevo = MiEntradaSalida.leerLinea("Introduce la modelo");
 
 
-                        int numEquipamientosNuevos = MiEntradaSalida.leerEntero("Introduce el numero de equipamientos que le quieras añadir");
+                        int numEquipamientosNuevos = MiEntradaSalida.leerEntero("Introduce el numero de equipamientos que le quieras añadir: ");
 
                         List<Equipamiento> equipamientos = new ArrayList<>(numEquipamientosNuevos);
 
                         for (int i = 0; i < numEquipamientosNuevos; i++) {
-                            String extraNuevo = MiEntradaSalida.leerLinea("Introduce el extra nuevo");
+                            String extraNuevo = MiEntradaSalida.leerLinea("Introduce el extra nuevo: ");
 
                             Equipamiento equipamientoNuevo = new Equipamiento();
 
@@ -105,14 +105,14 @@ public class Principal {
                         System.out.println("1. Exportar toda la base de datos");
                         System.out.println("2. Exportar un solo coche");
 
-                        int opcion6 = MiEntradaSalida.leerEnteroRango("Selecciona la opcion", 1, 2);
+                        int opcion6 = MiEntradaSalida.leerEnteroRango("Selecciona la opcion: ", 1, 2);
 
                         if (opcion6 == 1){
                             GestionConcesionarioService.exportarConcesionarioJson();
                             System.out.println("Base de Datos exportada a JSON correctamente.");
                         } else {
-                            String matriculaBuscada = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras exportar.");
-                            String rutaSalida = MiEntradaSalida.leerLinea("Introduce la ruta o el nombre del fichero JSON al que exportar el coche.");
+                            String matriculaBuscada = MiEntradaSalida.leerLinea("Introduce la matricula del coche que quieras exportar: ");
+                            String rutaSalida = MiEntradaSalida.leerLinea("Introduce la ruta o el nombre del fichero JSON al que exportar el coche: ");
                             GestionConcesionarioService.exportarCocheJson(matriculaBuscada, rutaSalida);
                             System.out.println("Coche exportado a JSON correctamente");
                         }
@@ -121,14 +121,14 @@ public class Principal {
                         System.out.println("1. Importar Base de datos");
                         System.out.println("2. Importar un coche");
 
-                        int op7 = MiEntradaSalida.leerEnteroRango("Selecciona la opcion", 1,2);
+                        int op7 = MiEntradaSalida.leerEnteroRango("Selecciona la opcion: ", 1,2);
 
                         if (op7 == 1){
-                            String rutaJsonBBDD = MiEntradaSalida.leerLinea("Introduce la ruta del Json a importar");
+                            String rutaJsonBBDD = MiEntradaSalida.leerLinea("Introduce la ruta del Json a importar: ");
                             GestionConcesionarioService.importarConcesionarioJson(rutaJsonBBDD);
                             System.out.println("Base de datos importada correctamente!");
                         } else {
-                            String rutaJsonCoche = MiEntradaSalida.leerLinea("Introduce la ruta del fichero Json del que se va a importar el coche");
+                            String rutaJsonCoche = MiEntradaSalida.leerLinea("Introduce la ruta del fichero Json del que se va a importar el coche: ");
                             GestionConcesionarioService.importarCocheJson(rutaJsonCoche);
                             System.out.println("Coche importado correctamente!");
                         }

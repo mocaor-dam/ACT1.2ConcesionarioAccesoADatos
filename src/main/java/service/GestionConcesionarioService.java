@@ -27,7 +27,11 @@ public class GestionConcesionarioService {
     public GestionConcesionarioService() {
     }
 
-
+    /**
+     *
+     * @throws AppException
+     * @throws JAXBException
+     */
     public static void inicializar() throws AppException, JAXBException {
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
         concesionario = unmarshalling(rutaXml);
@@ -38,6 +42,10 @@ public class GestionConcesionarioService {
         }
     }
 
+    /**
+     *
+     * @throws AppException
+     */
     public static void importarDesdeCsv() throws AppException {
         String rutaCsv = PropertiesReader.getInstance().get("ruta.csv");
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
@@ -75,6 +83,9 @@ public class GestionConcesionarioService {
                         coche.setModelo(modelo);
                         coche.setEquipamientos(extras);
 
+                        coche.setId(concesionario.getCoches().size() + 1);
+
+
                         concesionario.getCoches().add(coche);
                     }
                 }
@@ -88,10 +99,19 @@ public class GestionConcesionarioService {
         }
     }
 
+    /**
+     * Comprobamos si existe la matricula
+     * @param coche
+     * @throws MatriculaRepetidaException
+     * @throws JAXBException
+     * @throws AppException
+     */
     public static void insertarCocheNuevo(Coche coche) throws MatriculaRepetidaException, JAXBException, AppException {
         if (concesionario.existeMatricula(coche.getMatricula())){
             throw new MatriculaRepetidaException("Error: Esa matricula ya existe.");
         }
+        //Asignamos el id del coche
+        coche.setId(concesionario.getCoches().size() + 1);
 
         concesionario.getCoches().add(coche);
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
@@ -99,15 +119,33 @@ public class GestionConcesionarioService {
 
     }
 
+    /**
+     *
+     * @throws JAXBException
+     * @throws AppException
+     */
     public static void ordenarPorMatricula() throws JAXBException, AppException {
         concesionario.getCoches().sort(Comparator.comparing(Coche::getMatricula));
+
+        reorganizarIds();
+
         String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
         marshalling(concesionario, rutaXml);
     }
 
+
+    /**
+     *
+     * @param matricula
+     * @throws AppException
+     * @throws JAXBException
+     */
     public static void borrarRegistroPorMatricula(String matricula) throws AppException, JAXBException {
         if (concesionario.existeMatricula(matricula)){
             concesionario.getCoches().removeIf(coche -> coche.getMatricula().equalsIgnoreCase(matricula));
+
+            reorganizarIds();
+
             String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
             marshalling(concesionario, rutaXml);
         } else {
@@ -115,6 +153,15 @@ public class GestionConcesionarioService {
         }
     }
 
+    /**
+     *
+     * @param matricula
+     * @param marca
+     * @param modelo
+     * @param equipamientos
+     * @throws JAXBException
+     * @throws AppException
+     */
     public static void modificarRegistro(String matricula, String marca, String modelo, List<Equipamiento> equipamientos) throws JAXBException, AppException {
         if (concesionario.existeMatricula(matricula)){
            Coche cocheAModificar = concesionario.getCoches().stream()
@@ -133,6 +180,10 @@ public class GestionConcesionarioService {
     }
 
 
+    /**
+     *
+     * @throws AppException
+     */
     public static void exportarConcesionarioJson() throws AppException {
         String rutaJson = PropertiesReader.getInstance().get("ruta.json");
 
@@ -146,6 +197,12 @@ public class GestionConcesionarioService {
         }
     }
 
+    /**
+     *
+     * @param matricula
+     * @param rutaFicheroSalida
+     * @throws AppException
+     */
     public static void exportarCocheJson(String matricula, String rutaFicheroSalida) throws AppException {
         if (!concesionario.existeMatricula(matricula)){
             throw new AppException("No existe ningun coche con la matricula " + matricula);
@@ -164,6 +221,11 @@ public class GestionConcesionarioService {
         }
     }
 
+    /**
+     *
+     * @param rutaJson
+     * @throws AppException
+     */
     public static void importarConcesionarioJson(String rutaJson) throws AppException {
         Gson gson = new Gson();
 
@@ -172,6 +234,8 @@ public class GestionConcesionarioService {
             if (concesionarioNuevo != null && concesionarioNuevo.getCoches() != null) {
                 //Reemplazamos la base de datos
                 concesionario = concesionarioNuevo;
+
+                reorganizarIds();
 
                 String rutaXml = PropertiesReader.getInstance().get("ruta.xml");
                 marshalling(concesionario, rutaXml);
@@ -183,6 +247,11 @@ public class GestionConcesionarioService {
         }
     }
 
+    /**
+     *
+     * @param rutaJson
+     * @throws AppException
+     */
     public static void importarCocheJson(String rutaJson) throws AppException {
         Gson gson = new Gson();
 
@@ -193,6 +262,8 @@ public class GestionConcesionarioService {
                 if (concesionario.existeMatricula(cocheImportado.getMatricula())){
                     throw new AppException("El coche con la matricula " + cocheImportado.getMatricula() + " ya existe en la base de datos");
                 }
+
+                cocheImportado.setId(concesionario.getCoches().size() + 1);
 
                 //Añadimos el coche a la lista de concesionario
                 concesionario.getCoches().add(cocheImportado);
@@ -205,6 +276,10 @@ public class GestionConcesionarioService {
         }
     }
 
+    /**
+     *
+     * @throws AppException
+     */
     public static void generarInformeResumen() throws AppException {
        String rutaInforme = PropertiesReader.getInstance().get("ruta.informe");
 
@@ -277,7 +352,12 @@ public class GestionConcesionarioService {
 
     }
 
-
+    /**
+     *
+     * @param concesionario
+     * @param nombreFichero
+     * @throws JAXBException
+     */
     private static void marshalling(Concesionario concesionario, String nombreFichero) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(Concesionario.class);
 
@@ -291,6 +371,12 @@ public class GestionConcesionarioService {
 
     }
 
+    /**
+     *
+     * @param nombreFichero
+     * @return
+     * @throws JAXBException
+     */
     private static Concesionario unmarshalling(String nombreFichero) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(Concesionario.class);
 
@@ -301,6 +387,15 @@ public class GestionConcesionarioService {
         Concesionario concesionario = (Concesionario) unmarshaller.unmarshal(fichero);
 
         return concesionario;
+    }
+
+
+    private static void reorganizarIds(){
+        List<Coche> coches = concesionario.getCoches();
+
+        for (int i = 0; i < coches.size(); i++) {
+            coches.get(i).setId(i + 1);
+        }
     }
 
 }
