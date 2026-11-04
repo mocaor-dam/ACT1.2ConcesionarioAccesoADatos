@@ -7,6 +7,8 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Coche {
+    //Atributos
+    //Le ponemos que el nombre del elemento en el fichero Xml va a ser "matricula-coche"
     @XmlElement(name = "matricula-coche")
     private String matricula;
 
@@ -14,9 +16,11 @@ public class Coche {
 
     private String modelo;
 
+    //Lo marcamos como atributo
     @XmlAttribute
     private int id;
 
+    //Le ponemos que el nombre de la Lista va a ser "equipamiento", y el nombre de cada elemento como "extra"
     @XmlElementWrapper(name = "equipamiento")
     @XmlElement(name = "extra")
     private List<Equipamiento> equipamientos;

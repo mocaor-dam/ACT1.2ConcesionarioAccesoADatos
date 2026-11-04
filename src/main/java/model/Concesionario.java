@@ -5,6 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//Lo marcamos como el elemento principal del XML
 @XmlRootElement(name = "concesionario-de-coches")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Concesionario {

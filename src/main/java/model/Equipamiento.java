@@ -7,6 +7,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Equipamiento {
+    //Lo marcamos como un valor
     @XmlValue
     private String nombre;
 
