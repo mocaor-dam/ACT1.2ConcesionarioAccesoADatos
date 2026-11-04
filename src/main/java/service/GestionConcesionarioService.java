@@ -59,6 +59,7 @@ public class GestionConcesionarioService {
             String linea;
             while ((linea = br.readLine()) != null){
                 if (!linea.isBlank()){
+                    //Separamos los campos con el separador ;
                     String[] campos = linea.split(";");
 
                     String matricula = campos[0];
@@ -71,6 +72,7 @@ public class GestionConcesionarioService {
                         List<Equipamiento> extras = new ArrayList<>();
 
                         if (campos.length > 3 && !campos[3].isBlank()){
+                            //Para separarlos con el separador | escapandolo con las dos barras invertidas
                             String[] arrayExtras = campos[3].split("\\|");
                             for (String nombreExtra : arrayExtras){
                                 Equipamiento e = new Equipamiento();
