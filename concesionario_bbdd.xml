@@ -45,5 +45,13 @@
                 <extra>aleron</extra>
             </equipamiento>
         </coche>
+        <coche id="6">
+            <matricula-coche>4444EEE</matricula-coche>
+            <marca>Dacia</marca>
+            <modelo>Duster</modelo>
+            <equipamiento>
+                <extra>Climatizador</extra>
+            </equipamiento>
+        </coche>
     </listado-coches>
 </concesionario-de-coches>
